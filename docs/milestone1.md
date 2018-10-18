@@ -47,8 +47,7 @@ SINE, COSINE, EXPONENTIAL function case:
 ```
 
 # Software Organization
-Discuss how you plan on organizing your software package.
-* What will the directory structure look like?
+The directory structure of our library will look as follows:
 
 <pre>
 AutoDiff\
@@ -69,24 +68,24 @@ AutoDiff\
 
 </pre>
 
-* What modules do you plan on including?  What is their basic functionality?
-	Numpy: to do vector operations simultaneously
-Math: to do sin/cos/exp functions
+The modules we plan on including are:
+	-Dual: to be the main backbone of our computations by storing both the value and derivative after each expression
+	-math: to make operations such as sin/cos/exp compatible with our Dual class
 
-* Where will your test suite live?  Will you use `TravisCI`? `Coveralls`?
-	The github page of our package will include TravisCI and Coveralls.
-* How will you distribute your package (e.g. `PyPI`)?
-Yes, we will distribute the package via PyPI.
+The github page of our package will include TravisCI and Coveralls.
+
+The package will be distributed via PyPI.
 
 # Implementation
-Discuss how you plan on implementing the forward mode of automatic differentiation.
-* What are the core data structures?
-Dual object (from AutoDiff.dual)
-* What classes will you implement?
+
+Our core data structure will be a Dual object (from AutoDiff.Dual) which will have a value and derivate attributes. We will implement all the relevant dunder methods (__add__, __radd__, __mul__) to ensure that both the value and derivative are being calculated in each computation.
+
+The classes that will be implemented are:
 AutoDiff.math
 AutoDiff.dual
 AutoDiff.array (will be defined if needed)
-* What method and name attributes will your classes have?
+
+The method and name attributes that our class will have are:
 AutoDiff.math
 Methods:
 Sin, cos, cot, arcsin, exp, log10, loge, ln etc
@@ -98,11 +97,9 @@ dunder methods (add,radd)
 Value
 Derivative
 
-* What external dependencies will you rely on?
+The external dependencies that we will rely on are:
 numpy
 math
-* How will you deal with elementary functions like `sin` and `exp`?
-We are going to import these functions from math and numpy packages and wrap it under our package to account for differentiation operations
 
-Be sure to consider a variety of use cases.  For example, don't limit your design to scalar
-functions of scalar values.  Make sure you can handle the situations of vector functions of vectors and scalar functions of vectors.  Don't forget that people will want to use your library in algorithms like Newton's method (among others).
+We will deal with elementary functions like `sin` and `exp` by importing these functions from math and numpy packages and wrapping it under our package to account for differentiation operations
+
