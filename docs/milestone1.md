@@ -69,8 +69,10 @@ AutoDiff\
 </pre>
 
 The modules we plan on including are:
-	-Dual: to be the main backbone of our computations by storing both the value and derivative after each expression
-	-math: to make operations such as sin/cos/exp compatible with our Dual class
+
+-Dual: to be the main backbone of our computations by storing both the value and derivative after each expression
+
+-math: to make operations such as sin/cos/exp compatible with our Dual class
 
 The github page of our package will include TravisCI and Coveralls.
 
@@ -86,16 +88,18 @@ AutoDiff.dual
 AutoDiff.array (will be defined if needed)
 
 The method and name attributes that our class will have are:
+<pre>
 AutoDiff.math
-Methods:
-Sin, cos, cot, arcsin, exp, log10, loge, ln etc
-		These methods will be compatible with dual numbers, scalars, as well as vectors.
+	Methods:
+		Sin, cos, cot, arcsin, exp, log10, loge, ln etc
+		Note: These methods will be compatible with dual numbers, scalars, as well as vectors.
 AutoDiff.dual
 	Methods:
-dunder methods (add,radd)
+		dunder methods (add,radd)
 	Attributes:
-Value
-Derivative
+		Value
+		Derivative
+</pre>
 
 The external dependencies that we will rely on are:
 numpy
