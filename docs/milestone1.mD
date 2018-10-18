@@ -45,7 +45,7 @@ SINE, COSINE, EXPONENTIAL function case
 >>> AutoDiff.getDiff(function, 0)
 1
 ```
-### Software Organization
+# Software Organization
 Discuss how you plan on organizing your software package.
 * What will the directory structure look like?
 
@@ -74,7 +74,7 @@ Math: to do sin/cos/exp functions
 * How will you distribute your package (e.g. `PyPI`)?
 Yes, we will distribute the package via PyPI.
 
-### Implementation
+# Implementation
 Discuss how you plan on implementing the forward mode of automatic differentiation.
 * What are the core data structures?
 Dual object (from AutoDiff.dual)
