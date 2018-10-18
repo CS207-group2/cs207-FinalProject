@@ -54,17 +54,18 @@ AutoDiff\
          AutoDiff\
                __init__.py
                AutoDiff.py
-               tests/
+               tests\
                     	__init__.py
-	   ExpressionParser\
-		ExpressionParser.py
+	   Dual\
+		Dual.py
 		__init__.py
-	   Node\
-		Node.py
-		__init__.py
+	   math\
+		math.py
+		__init__.py	
          README.md
          setup.py
          LICENSE
+
 </pre>
 
 * What modules do you plan on including?  What is their basic functionality?
