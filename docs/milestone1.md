@@ -49,6 +49,7 @@ SINE, COSINE, EXPONENTIAL function case
 Discuss how you plan on organizing your software package.
 * What will the directory structure look like?
 
+<pre>
 AutoDiff\
          AutoDiff\
                __init__.py
@@ -64,6 +65,7 @@ AutoDiff\
          README.md
          setup.py
          LICENSE
+</pre>
 
 * What modules do you plan on including?  What is their basic functionality?
 	Numpy: to do vector operations simultaneously
