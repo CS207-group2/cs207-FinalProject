@@ -1,7 +1,7 @@
 # Introduction
 Describe problem the software solves and why it's important to solve that problem
 
-The package can automatically differentiate a function input into the program. By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. It currently supports forward-mode differentiation, which means [.....].
+The package can automatically differentiate a function input into the program. By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. It currently supports forward-mode differentiation.
 The major application of automatic differentiation is gradient-based optimization, which is commonly used as the foundation of neural nets.
 
 Calculates the derivative of a function to machine accuracy.
