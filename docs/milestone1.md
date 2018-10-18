@@ -1,11 +1,7 @@
 # Introduction
-Describe problem the software solves and why it's important to solve that problem
+This package can automatically differentiate a function input into the program. By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. It currently supports forward-mode differentiation.
 
-The package can automatically differentiate a function input into the program. By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. It currently supports forward-mode differentiation.
 The major application of automatic differentiation is gradient-based optimization, which is commonly used as the foundation of neural nets.
-
-Calculates the derivative of a function to machine accuracy.
-Avoid using the difference quotient, which is difficult to calculate to machine accuracy because, to estimate a limit approaching zero requires the computer to store and do computations with a very small number
 
 # Background  
 Automatic differentiation breaks down any function into its elementary functions using a graph structure and calculates the derivative while retaining the function by using dual numbers. This is accomplished by substituting (x + ɛ x-prime) for x in f(x).
@@ -15,36 +11,41 @@ As the steps of the graph structure become successively more complex, the deriva
 The chain rule is important for increasing the robustness of the automatic differentiation class, especially because it allows for the class to calculate the derivative of compositions (which are an important part of approximating non-linear functions).
 
 # How to Use *AutoDiff*
-How do you envision that a user will interact with your package?  What should they import?  How can they instantiate AD objects?
-
-**Note: This section should be a mix of pseudo code and text.  It should not include any actual operations yet.**
+The user can use AutoDiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
 
 Scalar function case:
 
 ```python
 >>> import AutoDiff
->>> def function(x):
+>>> def square_fn(x):
 ...	return x ** 2
->>> AutoDiff.getDiff(function, 2)
-4
+>>> ad_square = AutoDiff(square_fn)
+>>> ad_square.get_der(3)
+6
 ```
 
 Vector function case:
 ```python
 >>> import AutoDiff
->>> def function(x):
+>>> def square_fn(x):
 ...	return x ** 2
->>> AutoDiff.getDiff(function, [1, 2])
+>>> ad_square = AutoDiff(square_fn)
+>>> ad_square.get_der([1,2])
 np.array([2,4])
 ```
-SINE, COSINE, EXPONENTIAL function case
+
+In cases where the user wants to use operations such as sin/cos, they should call those functions from the AutoDiff library so that the derivative can be automatically computed.
+
+SINE, COSINE, EXPONENTIAL function case:
 ```python
 >>> import AutoDiff
->>> def function(x):
+>>> def sin_fn(x):
 ...	return Autodiff.sin(x)
->>> AutoDiff.getDiff(function, 0)
+>>> ad_sin = AutoDiff(sin_fn)
+>>> ad_sin.get_der(0)
 1
 ```
+
 # Software Organization
 Discuss how you plan on organizing your software package.
 * What will the directory structure look like?
