@@ -56,12 +56,12 @@ AutoDiff\
                AutoDiff.py
                tests\
                     	__init__.py
-	   Dual\
-		Dual.py
-		__init__.py
-	   math\
-		math.py
-		__init__.py	
+	   	Dual\
+			Dual.py
+			__init__.py
+	   	math\
+			math.py
+			__init__.py	
          README.md
          setup.py
          LICENSE
