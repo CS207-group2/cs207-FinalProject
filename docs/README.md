@@ -185,7 +185,7 @@ In cases where x is a scalar, we simply return the numpy equivalent (eg np.sin(x
 
 # External Dependencies
 - numpy: to perform calculations on elemental functions such as sin and exponent
-- inspect: to determine how many arguments there are to a function, which is necessary for the calculation of the Jacobian matrix
+
 
 # Future Implementations
 - Newton's method
