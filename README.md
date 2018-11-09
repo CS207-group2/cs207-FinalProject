@@ -9,9 +9,9 @@ Benedikt Groever
 
 Maleah Fekete
 
-[![Build Status](https://travis-ci.org/CS207-group2/project-working.svg?branch=master)](https://travis-ci.org/CS207-group2/project-working.svg?branch=master)
+[![Build Status](https://travis-ci.com/CS207-group2/cs207-FinalProject.svg?branch=master)](https://travis-ci.com/CS207-group2/cs207-FinalProject.svg?branch=master)
 
-[![Coverage Status](https://coveralls.io/repos/github/CS207-group2/project-working/badge.svg?branch=master)](https://coveralls.io/github/CS207-group2/project-working?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/CS207-group2/cs207-FinalProject/badge.svg?branch=travis)](https://coveralls.io/github/CS207-group2/cs207-FinalProject?branch=travis)
 
 # Autodiff
 
