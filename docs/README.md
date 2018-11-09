@@ -190,3 +190,4 @@ In cases where x is a scalar, we simply return the numpy equivalent (eg np.sin(x
 # Future Implementations
 - Newton's method
 - Visualization of the value and derivative at each step of the forward mode
+- Reverse mode
