@@ -49,7 +49,7 @@ Vector function case:
 ...    return x ** 2
 >>> ad_square = AD(square_fn)
 >>> ad_square.get_der([1,2])
-np.array([2,4])
+[2,4]
 ```
 
 In cases where the user wants to use operations such as sin/cos, they should call those functions from the AutoDiff library so that the derivative can be automatically computed.
@@ -60,11 +60,35 @@ SINE, COSINE, EXPONENTIAL function case:
 >>> import autodiff.admath.admath as admath
 
 >>> def sin_fn(x):
-...    return AD.sin(x)
+...    return 5*admath.sin(x)
 >>> ad_sin = AutoDiff(sin_fn)
 >>> ad_sin.get_der(0)
-1
+5
 ```
+
+Multivariable case (one function):
+```python
+>>> from autodiff.interface.interface import AutoDiff as AD
+
+>>> def my_fn_1d(x, y):
+...	  return x**2 + y**2
+>>> fn = AD(my_fn_1d)
+>>> fn.get_der([[1,2],[3,4],[5,6]])
+[[2, 4], [6, 8], [10, 12]], [[1, 1], [1, 1], [1, 1]]
+```
+
+
+Multivariable case (multiple functions):
+```python
+>>> from autodiff.interface.interface import AutoDiff as AD
+
+>>> def my_fn_2d(x, y):
+...	  return [x**2 + y**2, x + 2+y]
+>>> fn = AD(my_fn_2d, ndim=2)
+>>> fn.get_der([1,2])
+[[2, 4], [1, 1]]
+```
+
 
 # Background
 Automatic differentiation breaks down any function into its elementary functions using a graph structure, where every node is an operation, and calculates the derivative on top of the numerical value. The simultaneous value and derivative calculation is accomplished by using dual numbers, which are numbers have an additional component ɛ on top of its real component (called dual component).
