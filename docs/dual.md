@@ -1,4 +1,4 @@
-# autodiff.dual
+# Dual Class
 
 ## Implementation of unary operations
 We implemented the following unary operations:
