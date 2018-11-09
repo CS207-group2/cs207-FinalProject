@@ -27,7 +27,7 @@ Currently, a user can install the package by following the steps below:
 2. Create a virtual environment `python3 -m virtualenv env` in the top-level of your directory
 * you might need to download `virtualenv` if you do not have it.
 3. Type `source env/bin/activate` which activates your virtual environment
-4. run `python setup.py install` which installs Autodiff in your virutal environment
+4. run `python setup.py install` which installs Autodiff in your virtual environment
 
 ## How to use *Autodiff*?
 The user can use AutoDiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
