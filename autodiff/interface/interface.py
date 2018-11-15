@@ -72,3 +72,6 @@ class AutoDiff:
             else:
                 a = Dual(val)
                 return self.fn(a).der
+
+    def get_val(self, val):
+        return self.fn(val)
