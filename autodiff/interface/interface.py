@@ -74,4 +74,51 @@ class AutoDiff:
                 return self.fn(a).der
 
     def get_val(self, val):
-        return self.fn(val)
+        """ Returns derivatives of the function evaluated at values given.
+
+        INPUTS
+        =======
+        val : single number, a list of numbers, or a list of lists
+
+        RETURNS
+        =======
+        Derivates in the same shape given
+
+        EXAMPLE
+        =======
+        >>> a = AutoDiff(lambda x,y: 5*x + 4*y)
+        >>> a.get_der([[6.7, 4],[2,3],[4.5,6]])
+        [[5, 4], [5, 4], [5, 4]]
+        """
+        vals = [] # a list to store function values
+        if self.l >= 2: # 2 or more parameters
+            #for list of lists, each list evaluated at different variables
+            if any(isinstance(el, list) for el in val):
+                list_val = []
+                for p in val:
+                    list_val.append(self.get_val(p))
+                return list_val
+            elif self.l != len(val):
+                raise Exception('Function requires {} values that correspond to the multiple variables'.format(self.l))
+            else:
+                #for a list of numbers, evaluated at different variables.
+                for i in range(self.l):
+                    new_val = val.copy()
+                    new_val[i] = Dual(new_val[i])
+                    v = self.fn(*new_val)
+                    #Check if variable is in the function. (E.g., function paramaters are x, y and function is x.)
+                    if type(v) is Dual:
+                        vals.append(self.fn(*new_val).val)
+                    else:
+                        vals.append(0)
+                return vals
+        #for a list of numbers, evaluated at a single variable.
+        if (isinstance(val,list)):
+            for v in val:
+                a = Dual(v)
+                vals.append(self.fn(a).val)
+            return vals
+
+        else: # just 1 parameter
+            a = Dual(val)
+            return self.fn(a).val
