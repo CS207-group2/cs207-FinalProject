@@ -100,7 +100,7 @@ class AutoDiff:
         =======
         >>> a = AutoDiff(lambda x,y: 5*x + 4*y)
         >>> a.get_val([[2,3],[4,6]])
-        [22,44]
+        [22, 44]
         """
         vals = [] # a list to store function values
         if self.ndim >1:
