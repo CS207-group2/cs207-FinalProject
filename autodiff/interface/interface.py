@@ -33,13 +33,24 @@ class AutoDiff:
         [[5, 4], [5, 4], [5, 4]]
         """
         ders = []
-        if self.ndim >1:
-            for i in range(self.ndim):
-                def fxn(*args):
-                    return self.fn(*args)[i]
-                a = AutoDiff(fxn,ndim=1)
-                a.l=self.l
-                ders.append(a.get_der(val))
+        if self.ndim >1:                
+            if any(isinstance(el, list) for el in val):
+                for element in val:
+                    element_array = []
+                    for i in range(self.ndim):
+                        def fxn(*args):
+                            return self.fn(*args)[i]
+                        a = AutoDiff(fxn,ndim=1)
+                        a.l=self.l
+                        element_array.append(a.get_der(element))
+                    ders.append(element_array)
+            else:
+                for i in range(self.ndim):
+                    def fxn(*args):
+                        return self.fn(*args)[i]
+                    a = AutoDiff(fxn,ndim=1)
+                    a.l=self.l
+                    ders.append(a.get_der(val))
             return ders
         else:
             if self.l >= 2:
