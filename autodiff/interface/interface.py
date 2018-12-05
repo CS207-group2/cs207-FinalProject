@@ -33,7 +33,7 @@ class AutoDiff:
         [[5, 4], [5, 4], [5, 4]]
         """
         ders = []
-        if self.ndim >1:                
+        if self.ndim >1:
             if any(isinstance(el, list) for el in val):
                 for element in val:
                     element_array = []
@@ -99,7 +99,7 @@ class AutoDiff:
         EXAMPLE
         =======
         >>> a = AutoDiff(lambda x,y: 5*x + 4*y)
-        >>> a.get_val([2,3],[4,6]])
+        >>> a.get_val([[2,3],[4,6]])
         [22,44]
         """
         vals = [] # a list to store function values
