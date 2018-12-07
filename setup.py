@@ -16,7 +16,7 @@ setup(
     author="Phoebe Wong",
     author_email="wong@g.harvard.edu",
     description="A package for automatic differentiation",
-    # long_description=long_description,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/cs207-group2/cs207-FinalProject",
     packages=find_packages('autodiff'),
