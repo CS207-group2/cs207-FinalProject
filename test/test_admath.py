@@ -47,6 +47,15 @@ def test_log_fn__():
         assert np.log(test) == f.val
         assert 1/test == f.der
 
+def test_log2_fn__():
+    tests = np.linspace(1,100,15)
+    for test in tests:
+        x = Dual(test)
+        f = admath.log2(x)
+        assert np.log2(test) == admath.log2(test)
+        assert np.log2(test) == f.val
+        assert 1/(test*np.log(2)) == f.der
+
 def test_log10_fn__():
     tests = np.linspace(1,100,15)
     for test in tests:
@@ -56,14 +65,14 @@ def test_log10_fn__():
         assert np.log10(test) == f.val
         assert 1/(test*np.log(10)) == f.der
 
-def test_log2_fn__():
+def test_logb__():
     tests = np.linspace(1,100,15)
     for test in tests:
         x = Dual(test)
-        f = admath.log2(x)
-        assert np.log2(test) == admath.log2(test)
-        assert np.log2(test) == f.val
-        assert 1/(test*np.log(2)) == f.der
+        f = admath.logb(x, np.exp(1))
+        assert np.log(test) == admath.logb(test, np.exp(1))
+        assert np.log(test) == f.val
+        assert 1/test == f.der
 
 def test_exp_fn__():
     tests = np.linspace(-100,100,15)
@@ -74,6 +83,19 @@ def test_exp_fn__():
         assert np.exp(test) == f.val
         assert np.exp(test) == f.der
 
+def test_power1():
+    x = Dual(2)
+    f = admath.power(x,x)
+    assert f.der == 2*(2+2*np.log(2))
+    assert f.val == 4.0
+    assert admath.power(2,2) == 4.0
+    f = admath.power(x,2)
+    assert f.val == 4
+    assert f.der == 4
+    f = admath.power(2,x)
+    assert f.val == 4.0
+    assert f.der == np.log(2) * 2 ** 2
+
 def test_sqrt_fn__():
     tests = np.linspace(1,100,15)
     for test in tests:
@@ -82,3 +104,52 @@ def test_sqrt_fn__():
         assert np.sqrt(test) == admath.sqrt(test)
         assert np.sqrt(test) == f.val
         assert 1/2*1/np.sqrt(test) == f.der
+
+def test_arcsin():
+    x = Dual(0)
+    f = admath.arcsin(x)
+    assert 1 == f.der
+    assert 0 == f.val
+    assert 0 == admath.arcsin(0)
+
+def test_arccos():
+    x = Dual(0)
+    f = admath.arccos(x)
+    assert -1 == f.der
+    assert np.pi/2 == f.val
+    assert np.pi/2 == admath.arccos(0)
+
+def test_arctan():
+    x = Dual(0)
+    f = admath.arctan(x)
+    assert 1 == f.der
+    assert 0 == f.val
+    assert 0 == admath.arctan(0)
+
+def test_sinh():
+    x = Dual(0)
+    f = admath.sinh(x)
+    assert 1 == f.der
+    assert 0 == f.val
+    assert 0 == admath.sinh(0)
+
+def test_cosh():
+    x = Dual(0)
+    f = admath.cosh(x)
+    assert 0 == f.der
+    assert 1 == f.val
+    assert 1 == admath.cosh(0)
+
+def test_tanh():
+    x = Dual(0)
+    f = admath.tanh(x)
+    assert 1 == f.der
+    assert 0 == f.val
+    assert 0 == admath.tanh(0)
+
+def test_logistic():
+    x = Dual(1)
+    f = admath.logistic(x)
+    assert 0.25 == f.der
+    assert 0.50 == f.val
+    assert 0.50 == admath.logistic(1)
