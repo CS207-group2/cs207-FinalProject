@@ -124,6 +124,8 @@ def test__rpow__():
     assert f.val == 4.0
     assert f.der == np.log(2) * 2 ** 2
 
+# Comparision operations equal and not equal
+
 def test__eq__():
     x = dual.Dual(2)
     y = dual.Dual(2)
@@ -138,19 +140,7 @@ def test_ne__():
     assert False == (x != y)
     assert True == (x != z)
 
-def test_ne__():
-    x = dual.Dual(2)
-    y = dual.Dual(2)
-    z = dual.Dual(1)
-    assert False == (x != y)
-    assert True == (x != z)
-
-def test_ne__():
-    x = dual.Dual(2)
-    y = dual.Dual(2)
-    z = dual.Dual(1)
-    assert False == (x != y)
-    assert True == (x != z)
+# Comparision operation 
 
 def test__lt__():
     x = dual.Dual(2)
