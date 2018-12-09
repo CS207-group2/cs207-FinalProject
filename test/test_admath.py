@@ -1,6 +1,6 @@
 import pytest
-from autodiff.dual import Dual
-import autodiff.admath as admath
+from pyautodiff.dual import Dual
+import pyautodiff.admath as admath
 import numpy as np
 import math
 

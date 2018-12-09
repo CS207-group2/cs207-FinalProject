@@ -1,5 +1,5 @@
 import pytest
-from autodiff.optimizer import Optimizer
+from pyautodiff.optimizer import Optimizer
 
 import numpy as np
 
