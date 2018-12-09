@@ -12,7 +12,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pyautodiff",
-    version="0.1",
+    version="0.1.1",
     author="Phoebe Wong",
     author_email="wong@g.harvard.edu",
     description="A package for automatic differentiation",
