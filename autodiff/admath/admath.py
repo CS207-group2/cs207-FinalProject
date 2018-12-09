@@ -20,7 +20,7 @@ def sin(x):
 def cos(x):
     """Calculate cosine of the input
 
-        Keyword arguments:
+        Keyword arguments:numpy.tan
         x -- a real number or a dual number
 
         Return:
@@ -32,6 +32,23 @@ def cos(x):
         return x
     else:
         return np.cos(x)
+
+def tan(x):
+    """Calculate tangent of the input
+
+        Keyword arguments:
+        x -- a real number or a dual number
+
+        Return:
+        the tanget value
+    """
+    if (isinstance(x,Dual)):
+        x.der = 1/np.cos(x.val)**2*x.der
+        x.val = np.tan(x.val)
+        return x
+    else:
+        return np.tan(x)
+
 
 def log(x):
     """Calculate the natural log of the input
