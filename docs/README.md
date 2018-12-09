@@ -188,6 +188,9 @@ In cases where x is a scalar, we simply return the numpy equivalent (eg np.sin(x
 
 
 # Future Implementations
-- Newton's method
-- Visualization of the value and derivative at each step of the forward mode
-- Reverse mode
+In addition to the dual and autodiff classes, there is now an opitimizer class. Optimizer is used to fit data, calculate gradients, and perform gradient descent. 
+    Optimizer is programmed with:
+    - a mean squared error loss function. In addition, the user may pass in their own loss function. 
+    - gradient descent and stocastic gradient descent as optimizers.  
+    - l1 and l2 regularizer functions, corresponding to lasso and ridge regression, respectively. 
+
