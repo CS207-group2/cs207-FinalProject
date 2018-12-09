@@ -15,7 +15,7 @@
 # Introduction
 Automatic differentiation is a set of techniques to numerically evaluate the derivative of a function specified by a computer program. Automatic differentiation breaks down a function by looking at the sequence of elementary arithmetic operations (addition, subtraction, multiplication and division) and elementary functions (exponential, log10, log2, loge, sin, cos, etc). By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. A major application of automatic differentiation is gradient-based optimization, such as gradient descent, which is commonly used as the foundation of many machine learning algorithms including Neural Networks.
 
-This package, `autodiff`, is a package of automatic differentiation, which means it can automatically differentiate a function input into the program.
+This package, `pyautodiff`, is a package of automatic differentiation, which means it can automatically differentiate a function input into the program.
 
 The package currently supports forward-mode differentiation, which means the chain rule is traversed from inside to outside.
 
@@ -27,10 +27,10 @@ Currently, a user can install the package by following the steps below:
 2. Create a virtual environment `python3 -m virtualenv env` in the top-level of your directory
 * you might need to download `virtualenv` if you do not have it.
 3. Type `source env/bin/activate` which activates your virtual environment
-4. run `python setup.py install` which installs Autodiff in your virtual environment
+4. run `python setup.py install` which installs pyautodiff in your virtual environment
 
-## How to use *Autodiff*?
-The user can use AutoDiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
+## How to use *pyautodiff*?
+The user can use pyautoDiff by passing a function to the pyautoDiff constructor to create an pyautoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
 
 Scalar function case:
 ```python
@@ -52,7 +52,7 @@ Vector function case:
 [2,4]
 ```
 
-In cases where the user wants to use operations such as sin/cos, they should call those functions from the AutoDiff library so that the derivative can be automatically computed.
+In cases where the user wants to use operations such as sin/cos, they should call those functions from the pyautoDiff library so that the derivative can be automatically computed.
 
 SINE, COSINE, EXPONENTIAL function case:
 ```python
@@ -201,6 +201,13 @@ We implemented the following functions:
 
 In cases where x is a scalar, we simply return the numpy equivalent (eg np.sin(x)). When x is dual, we manually set val and der of the dual object. We set the der by figuring out symbolically what the derivative should be (sin(x) should be cos(x)) and applying the chain rule (multiplying x.der to cos(x)). This way, our program can automatically apply the chain rule to our inputs and handle nested functions with ease. Again, like the scalar case, we use numpy to do the actual elemental calculations.
 
+### Optimizer Module
+#### Usage
+This optimizer module is a wrapper for pyautodiff with an API similar to sklearn for fitting dependent and independent variables in the data
+
+It leverages autodiff to calculate the gradients and performs gradient descent. It can take in a custom loss function, regularizer, and/or optimizer.
+
+#### Implementation
 
 # External Dependencies
 - numpy: to perform calculations on elemental functions such as sin and exponent
