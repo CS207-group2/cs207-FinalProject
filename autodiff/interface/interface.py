@@ -16,7 +16,7 @@ class AutoDiff:
         self.l = len(list(sig.parameters))
         self.multivar = multivar
 
-    def get_der(self, *args):
+    def get_der(self, val):
         """ Returns derivatives of the function evaluated at values given.
 
         INPUTS
@@ -34,8 +34,8 @@ class AutoDiff:
         [[5, 4], [5, 4], [5, 4]]
         """
         if self.multivar:
-            self.l = len(list(args))
-        val = list(args)
+            self.l = len(val)
+
 
         ders = []
         if self.ndim >1:
