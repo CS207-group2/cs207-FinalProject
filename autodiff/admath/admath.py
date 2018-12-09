@@ -290,3 +290,32 @@ def logistic(x, L=1, k=1, x0=1):
         return x
     else:
         return help_logistic(x, L, k, x0)
+
+
+# (5*x+3+4)
+# der = 5*x.der, val = 5*x.val+3+4
+def sum(xs):
+    cur_val = 0
+    cur_der = 0
+    is_dual = False
+    # print('xs')
+    for x in xs:
+        # print('val: ',x.val)
+        if (isinstance(x,Dual)):
+            is_dual = True
+            cur_der += x.der
+            cur_val += x.val
+        else:
+            cur_val += x
+    if is_dual:
+        return Dual(cur_val,cur_der)
+    else:
+        return cur_val
+
+def abs(x):
+    if (isinstance(x,Dual)):
+        x.der = x.val/np.abs(x.val)
+        x.val = np.abs(x.val)
+        return x
+    else:
+        return np.abs(x)

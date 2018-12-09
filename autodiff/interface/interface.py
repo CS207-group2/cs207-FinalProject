@@ -2,7 +2,7 @@ from autodiff.dual.dual import Dual
 import inspect
 
 class AutoDiff:
-    def __init__(self, fn, ndim=1):
+    def __init__(self, fn, ndim=1,multivar=False):
         """
         fn : function, the function of which we want to calculate the derivative
         ndim : float, the number of dimensions of the function
@@ -13,6 +13,7 @@ class AutoDiff:
         self.ndim = ndim
         sig = inspect.signature(self.fn)
         self.l = len(list(sig.parameters))
+        self.multivar = multivar
 
 
     def get_der(self, val):
@@ -32,6 +33,9 @@ class AutoDiff:
         >>> a.get_der([[6.7, 4],[2,3],[4.5,6]])
         [[5, 4], [5, 4], [5, 4]]
         """
+        if self.multivar:
+            self.l = len(val)
+
         ders = []
         if self.ndim >1:
             if any(isinstance(el, list) for el in val):
