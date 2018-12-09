@@ -1,5 +1,5 @@
 import pytest
-from autodiff.optimizer.optimizer import Optimizer
+from autodiff.optimizer import Optimizer
 
 import numpy as np
 
@@ -52,4 +52,3 @@ def test_opty_verbose_sgd():
     opt=Optimizer(loss=user_mse,optimizer='sgd',lam=0.01)
     opt.fit(X2,y2,iters=1000, verbose=True)
     assert opt.coefs[0] <= 3
-    

@@ -140,7 +140,7 @@ def test_ne__():
     assert False == (x != y)
     assert True == (x != z)
 
-# Comparision operation 
+# Comparision operation
 
 def test__lt__():
     x = dual.Dual(2)
