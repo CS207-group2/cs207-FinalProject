@@ -37,6 +37,13 @@ def test2__cos_fn__():
         assert np.cos(test) == f.val
         assert -1*np.sin(test) == f.der
 
+def test1__tan_fn__():
+    x = Dual(0)
+    f = admath.tan(x)
+    assert f.val == 0
+    assert f.der == 1
+    assert admath.tan(0) == 0
+
 
 def test_log_fn__():
     tests = np.linspace(1,100,15)
