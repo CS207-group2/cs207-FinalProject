@@ -1,8 +1,9 @@
+#Maleah's Dec 4
 from autodiff.dual.dual import Dual
 import inspect
 
 class AutoDiff:
-    def __init__(self, fn, ndim=1):
+    def __init__(self, fn, ndim=1,multivar=False):
         """
         fn : function, the function of which we want to calculate the derivative
         ndim : float, the number of dimensions of the function
@@ -13,9 +14,9 @@ class AutoDiff:
         self.ndim = ndim
         sig = inspect.signature(self.fn)
         self.l = len(list(sig.parameters))
+        self.multivar = multivar
 
-
-    def get_der(self, val):
+    def get_der(self, *args):
         """ Returns derivatives of the function evaluated at values given.
 
         INPUTS
@@ -32,29 +33,21 @@ class AutoDiff:
         >>> a.get_der([[6.7, 4],[2,3],[4.5,6]])
         [[5, 4], [5, 4], [5, 4]]
         """
+        if self.multivar:
+            self.l = len(list(args))
+        val = list(args)
+
         ders = []
         if self.ndim >1:
-            if any(isinstance(el, list) for el in val):
-                for element in val:
-                    element_array = []
-                    for i in range(self.ndim):
-                        def fxn(*args):
-                            return self.fn(*args)[i]
-                        a = AutoDiff(fxn,ndim=1)
-                        a.l=self.l
-                        element_array.append(a.get_der(element))
-                    ders.append(element_array)
-            else:
-                for i in range(self.ndim):
-                    def fxn(*args):
-                        return self.fn(*args)[i]
-                    a = AutoDiff(fxn,ndim=1)
-                    a.l=self.l
-                    ders.append(a.get_der(val))
+            for i in range(self.ndim):
+                def fxn(*args):
+                    return self.fn(*args)[i]
+                a = AutoDiff(fxn,ndim=1)
+                a.l=self.l
+                ders.append(a.get_der(val))
             return ders
         else:
             if self.l >= 2:
-
                 #for list of lists, each list evaluated at different variables
                 if any(isinstance(el, list) for el in val):
                     list_der = []
@@ -86,7 +79,7 @@ class AutoDiff:
                 return self.fn(a).der
 
     def get_val(self, val):
-        """ Returns function value at x values given.
+        """ Returns derivatives of the function evaluated at values given.
 
         INPUTS
         =======
@@ -99,49 +92,38 @@ class AutoDiff:
         EXAMPLE
         =======
         >>> a = AutoDiff(lambda x,y: 5*x + 4*y)
-        >>> a.get_val([[2,3],[4,6]])
-        [22, 44]
+        >>> a.get_der([[6.7, 4],[2,3],[4.5,6]])
+        [[5, 4], [5, 4], [5, 4]]
         """
         vals = [] # a list to store function values
-        if self.ndim >1:
-            vals = []
+        if self.l >= 2: # 2 or more parameters
+            #for list of lists, each list evaluated at different variables
             if any(isinstance(el, list) for el in val):
-                for element in val:
-                    element_array = []
-                    for i in range(self.ndim):
-                        def fxn(*args):
-                            return self.fn(*args)[i]
-                        a = AutoDiff(fxn,ndim=1)
-                        a.l=self.l
-                        element_array.append(a.get_val(element))
-                    vals.append(element_array)
+                list_val = []
+                for p in val:
+                    list_val.append(self.get_val(p))
+                return list_val
+            elif self.l != len(val):
+                raise Exception('Function requires {} values that correspond to the multiple variables'.format(self.l))
             else:
-                for i in range(self.ndim):
-                    def fxn(*args):
-                        return self.fn(*args)[i]
-                    a = AutoDiff(fxn,ndim=1)
-                    a.l=self.l
-                    vals.append(a.get_val(val))
-            return vals
-        else:
-            if self.l >= 2: # 2 or more parameters
-                #for list of lists, each list evaluated at different variables
-                if any(isinstance(el, list) for el in val):
-                    list_val = []
-                    for p in val:
-                        list_val.append(self.get_val(p))
-                    return list_val
-                if self.l != len(val):
-                    raise Exception('Function requires {} values that correspond to the multiple variables'.format(self.l))
-                else:
-                    return self.fn(*val)
-
-            #for a list of numbers, evaluated at a single variable.
-            if (isinstance(val,list)):
-                for v in val:
-                    a = Dual(v)
-                    vals.append(self.fn(a).val)
+                #for a list of numbers, evaluated at different variables.
+                for i in range(self.l):
+                    new_val = val.copy()
+                    new_val[i] = Dual(new_val[i])
+                    v = self.fn(*new_val)
+                    #Check if variable is in the function. (E.g., function paramaters are x, y and function is x.)
+                    if type(v) is Dual:
+                        vals.append(self.fn(*new_val).val)
+                    else:
+                        vals.append(0)
                 return vals
-            else: # just 1 parameter
-                a = Dual(val)
-                return self.fn(a).val
+        #for a list of numbers, evaluated at a single variable.
+        if (isinstance(val,list)):
+            for v in val:
+                a = Dual(v)
+                vals.append(self.fn(a).val)
+            return vals
+
+        else: # just 1 parameter
+            a = Dual(val)
+            return self.fn(a).val
