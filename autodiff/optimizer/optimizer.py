@@ -1,7 +1,7 @@
 from autodiff.interface.interface import AutoDiff as AD
 import autodiff.admath.admath as admath
 import numpy as np
-from sklearn.metrics import accuracy_score
+# from sklearn.metrics import accuracy_score
 import random
 
 class Optimizer:
@@ -138,8 +138,8 @@ class Optimizer:
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
                 print("=====\nIter {} Loss: {}".format(i,cur_loss))
-                print(*self.coefs)
-            grads = ad_obj.get_der(*self.coefs)
+                print(self.coefs)
+            grads = ad_obj.get_der(list(self.coefs))
             for idx,grad in enumerate(grads):
                 if verbose:
                     print('coef{}: {}'.format(idx,self.coefs[idx]))
@@ -159,8 +159,8 @@ class Optimizer:
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
                 print("=====\nIter {} Loss: {}".format(i,cur_loss))
-                print(*self.coefs)
-            grads = ad_obj.get_der(*self.coefs)
+                print(self.coefs)
+            grads = ad_obj.get_der(list(self.coefs))
 
             for idx,grad in enumerate(grads):
                 if verbose:
