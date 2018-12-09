@@ -160,3 +160,24 @@ def test_logistic():
     assert 0.25 == f.der
     assert 0.50 == f.val
     assert 0.50 == admath.logistic(1)
+
+def test_logistic():
+    x = Dual(1)
+    f = admath.logistic(x)
+    assert 0.25 == f.der
+    assert 0.50 == f.val
+    assert 0.50 == admath.logistic(1)
+
+def test_sum():
+    x = Dual(1)
+    f = admath.sum([x**2, x**3])
+    assert 5 == f.der
+    assert 2 == f.val
+    assert 5 == admath.sum([2,3])
+
+def test_abs():
+    x = Dual(-1)
+    f = admath.abs(x**3)
+    assert -1 == f.der
+    assert 1 == f.val
+    assert 1 == admath.abs(-1)

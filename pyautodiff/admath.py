@@ -295,6 +295,14 @@ def logistic(x, L=1, k=1, x0=1):
 # (5*x+3+4)
 # der = 5*x.der, val = 5*x.val+3+4
 def sum(xs):
+    """Calculate the sum of the input
+
+        Keyword arguments:
+        xs -- a real value list
+
+        Return:
+        the sum of the array
+    """
     cur_val = 0
     cur_der = 0
     is_dual = False
@@ -313,6 +321,14 @@ def sum(xs):
         return cur_val
 
 def abs(x):
+    """Calculate the sum of the input
+
+        Keyword arguments:
+        x -- a real value
+
+        Return:
+        the absolute value of x
+    """
     if (isinstance(x,Dual)):
         x.der = x.val/np.abs(x.val)
         x.val = np.abs(x.val)
