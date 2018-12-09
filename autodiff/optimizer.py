@@ -1,5 +1,5 @@
-from autodiff.interface.interface import AutoDiff as AD
-import autodiff.admath.admath as admath
+from autodiff.interface import AutoDiff as AD
+import autodiff.admath as admath
 import numpy as np
 # from sklearn.metrics import accuracy_score
 import random

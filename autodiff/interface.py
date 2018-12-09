@@ -1,4 +1,4 @@
-from autodiff.dual.dual import Dual
+from autodiff.dual import Dual
 import inspect
 
 class AutoDiff:
