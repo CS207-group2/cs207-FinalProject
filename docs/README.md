@@ -2,7 +2,7 @@
 - [Introduction](#Introduction)
 - [Usage](#Usage)
   - [Installation](#Installation)
-  - [How to use](#How-to-use-Autodiff)
+  - [How to use](#How-to-use-pyautodiff)
 - [Background](#Background)
 - [Software organization](#Software-Organization)
 - [Implementation Details](#Implementation-Details)
