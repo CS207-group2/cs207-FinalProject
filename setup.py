@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
-    name="autodiff",
+    name="pyautodiff",
     version="0.1",
-    packages=find_packages('autodiff'),
-    package_dir={"":"autodiff"}
+    packages=find_packages('pyautodiff'),
+    package_dir={"":"pyautodiff"}
 )

@@ -1,4 +1,4 @@
-from autodiff.dual import Dual as Dual
+from pyautodiff.dual import Dual as Dual
 import numpy as np
 
 def sin(x):

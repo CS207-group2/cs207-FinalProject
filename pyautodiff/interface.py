@@ -1,4 +1,4 @@
-from autodiff.dual import Dual
+from pyautodiff.dual import Dual
 import inspect
 
 class AutoDiff:
