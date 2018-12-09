@@ -22,15 +22,13 @@ The package currently supports forward-mode differentiation, which means the cha
 # Usage
 
 ## Installation
-Currently, a user can install the package by following the steps below:
-1. Navigate to your project directory and download the package from our GitHub [repository](https://github.com/CS207-group2/cs207-FinalProject/)
-2. Create a virtual environment `python3 -m virtualenv env` in the top-level of your directory
-* you might need to download `virtualenv` if you do not have it.
-3. Type `source env/bin/activate` which activates your virtual environment
-4. run `python setup.py install` which installs pyautodiff in your virtual environment
+* The package is available on `PyPI`
+```
+pip install pyautodiff
+```
 
 ## How to use *pyautodiff*?
-The user can use pyautoDiff by passing a function to the pyautoDiff constructor to create an pyautoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
+The user can use pyautodiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative and output value of that function at a certain value by passing in that input value to the object. This object can then be called to return the derivative and the output values of the function evaluated at that point.
 
 Scalar function case:
 ```python
@@ -40,6 +38,8 @@ Scalar function case:
 >>> ad_square = AD(square_fn)
 >>> ad_square.get_der(3)
 6
+>>> ad_square.get_val(3)
+9
 ```
 
 Vector function case:
@@ -49,10 +49,12 @@ Vector function case:
 ...    return x ** 2
 >>> ad_square = AD(square_fn)
 >>> ad_square.get_der([1,2])
-[2,4]
+[2, 4]
+>>> ad_square.get_val([1,2])
+[1, 4]
 ```
 
-In cases where the user wants to use operations such as sin/cos, they should call those functions from the pyautoDiff library so that the derivative can be automatically computed.
+In cases where the user wants to use operations such as sin/cos, they should call those functions from the pyautodiff library so that the derivative can be automatically computed.
 
 SINE, COSINE, EXPONENTIAL function case:
 ```python
@@ -64,6 +66,8 @@ SINE, COSINE, EXPONENTIAL function case:
 >>> ad_sin = AutoDiff(sin_fn)
 >>> ad_sin.get_der(0)
 5
+>>> ad_sin.get_val(0)
+0
 ```
 
 Multivariable case (one function):
@@ -74,7 +78,9 @@ Multivariable case (one function):
 ...	  return x**2 + y**2
 >>> fn = AD(my_fn_1d)
 >>> fn.get_der([[1,2],[3,4],[5,6]])
-[[2, 4], [6, 8], [10, 12]], [[1, 1], [1, 1], [1, 1]]
+[[2, 4], [6, 8], [10, 12]]
+>>> fn.get_val([[1,2],[3,4],[5,6]])
+[5, 25, 61]
 ```
 
 
@@ -87,6 +93,8 @@ Multivariable case (multiple functions):
 >>> fn = AD(my_fn_2d, ndim=2)
 >>> fn.get_der([1,2])
 [[2, 4], [1, 1]]
+>>> fn.get_val([1,2])
+[5, 5]
 ```
 
 
