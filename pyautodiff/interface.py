@@ -1,5 +1,6 @@
 from pyautodiff.dual import Dual
 import inspect
+import numpy as np
 
 class AutoDiff:
     def __init__(self, fn, ndim=1,multivar=False):
@@ -15,6 +16,11 @@ class AutoDiff:
         self.l = len(list(sig.parameters))
         self.multivar = multivar
 
+    def get_der_numpy(self,val):
+        return np.array(self.get_der(list(val)))
+
+    def get_val_numpy(self,val):
+        return np.array(self.get_val(list(val)))
 
     def get_der(self, val):
         """ Returns derivatives of the function evaluated at values given.
@@ -106,6 +112,10 @@ class AutoDiff:
         >>> a.get_val([[2,3],[4,6]])
         [22, 44]
         """
+
+        if self.multivar:
+            self.l = len(val)
+
         vals = [] # a list to store function values
         if self.ndim >1:
             vals = []

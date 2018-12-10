@@ -1,5 +1,6 @@
 from pyautodiff.interface import AutoDiff as AD
 import pyautodiff.admath as admath
+from scipy.optimize import line_search
 import numpy as np
 from sklearn.metrics import accuracy_score,r2_score
 import random
@@ -47,6 +48,10 @@ class Optimizer:
             return self.cost_fn_gd
         elif optimizer == 'sgd':
             return self.cost_fn_sgd
+        elif optimizer == 'steepestgd':
+            return self.cost_fn_gd
+        elif optimizer == 'bfgs':
+            return self.cost_fn_gd
 
     def sigmoid(self, z):
         return 1/(1+admath.exp(-z))
@@ -107,6 +112,10 @@ class Optimizer:
                 return self.fit_gd
             elif optimizer == 'sgd':
                 return self.fit_sgd
+            elif optimizer == 'steepestgd':
+                return self.fit_steepestgd
+            elif optimizer == 'bfgs':
+                return self.fit_bfgs
             else:
                 raise Exception('Invalid optimizer')
         # else: # user-inputted optimizer
@@ -192,3 +201,51 @@ class Optimizer:
                     print(grad)
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
             i+=1
+
+    def fit_steepestgd(self, X, y, iters=1000,verbose=False):
+        self.coefs = np.array([1,1,1])
+        cur_loss = self.mse_loss(y, self.predict(X))
+        i = 0
+        sk = 1
+        while i < iters and np.linalg.norm(sk) > 10**(-6):
+            func_for_opt = self.cost(X,y)
+            ad_obj = AD(func_for_opt,multivar=True)
+            if verbose:
+                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print(self.coefs)
+            grads = ad_obj.get_der_numpy(self.coefs)
+            sk = -1*grads
+            etak = line_search(ad_obj.get_val_numpy,ad_obj.get_der_numpy,self.coefs,sk)[0]
+            self.coefs = self.coefs + etak*sk
+            cur_loss = self.mse_loss(y, self.predict(X))
+            i+=1
+
+    def fit_bfgs(self, X, y, iters=1000,verbose=False):
+        xk = np.random.rand(X.shape[1])
+        self.coefs = xk
+        Bk = np.identity(xk.shape[0])
+        cur_loss = self.mse_loss(y, self.predict(X))
+        i = 0
+        sk = 1
+
+        while i < iters and np.linalg.norm(sk) > 10**(-8):
+
+            if verbose:
+                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print(self.coefs)
+
+            self.coefs = xk
+            func_for_opt = self.cost(X,y)
+            ad_obj = AD(func_for_opt,multivar=True)
+            def gradf(xk): return ad_obj.get_der_numpy(xk)
+            sk = np.linalg.solve(Bk, -gradf(xk))
+            xkplus = xk + sk
+            yk = gradf(xkplus) - gradf(xk)
+            num = np.matmul(np.matmul(Bk,np.outer(sk,sk.T)),Bk)
+            den = np.inner(sk.T, np.matmul(Bk,sk))
+            Bk  = Bk + np.outer(yk,yk.T) / np.inner(yk.T,sk) - num /den
+            xk = np.copy(xkplus)
+            cur_loss = self.mse_loss(y, self.predict(X))
+            i+=1
+
+        self.coefs = xk
