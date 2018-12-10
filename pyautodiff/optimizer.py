@@ -203,7 +203,7 @@ class Optimizer:
             i+=1
 
     def fit_steepestgd(self, X, y, iters=1000,verbose=False):
-        self.coefs = np.array([1,1,1])
+        self.coefs = np.ones(X.shape[1])
         cur_loss = self.mse_loss(y, self.predict(X))
         i = 0
         sk = 1
