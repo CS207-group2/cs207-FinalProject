@@ -9,6 +9,7 @@
   - [Interface](#Interface-Class)
   - [Dual](#Dual-Class)
   - [Admath](#Admath-Module)
+  - [Optimizer](#Optimizer-Module)
 - [External Dependencies](#External-Dependencies)
 - [Future Implementations](#Future-Implementations)
 
@@ -97,6 +98,15 @@ Multivariable case (multiple functions):
 [5, 5]
 ```
 
+Gradient Descent (optimization):
+```python
+>>> from sklearn.datasets import make_regression
+>>> from pyautodiff.optimizer import Optimizer
+>>> X,y,coef = make_regression(n_samples=4500,n_features=6,n_informative=6,coef=True) # simulate data for regression and store ground truth coefficients
+>>> opt = Optimizer(loss = 'mse', optimizer = 'sgd',lr=0.0001) #Initialize optimizer
+>>> opt.fit(X_array, y, iters=1000) # fit to the data
+>>> opt.coefs #print out the coefficients
+```
 
 # Background
 Automatic differentiation breaks down any function into its elementary functions using a graph structure, where every node is an operation, and calculates the derivative on top of the numerical value. The simultaneous value and derivative calculation is accomplished by using dual numbers, which are numbers have an additional component ɛ on top of its real component (called dual component).
