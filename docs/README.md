@@ -216,12 +216,21 @@ This optimizer module is a wrapper for pyautodiff with an API similar to sklearn
 It leverages autodiff to calculate the gradients and performs gradient descent. It can take in a custom loss function, regularizer, and/or optimizer.
 
 #### Implementation
+Optimizer takes in a learning rate (lr=0.01), a loss function (loss='mse'), an optimizer (optimizer='gd'), a regularizer (regularizer=None), and a regularizer parameter value (lam=None). 
+Optimizer is programmed with:
+    - a mean squared error loss function. In addition, the user may pass in their own loss function. 
+    - gradient descent, stocastic gradient descent, steepest gradient descent, and BFGS algorithm as optimizers.  
+    - l1 and l2 as regularizer functions, corresponding to lasso and ridge regression, respectively.
 
 # External Dependencies
 - numpy: to perform calculations on elemental functions such as sin and exponent
 
 
 # Future Implementations
-- Newton's method
-- Visualization of the value and derivative at each step of the forward mode
-- Reverse mode
+In the future, this package could be improved in a number of ways. 
+
+For example, the optimizer module could be extended to be more robust and user-friendly. Optimizer could take in customized optimizer and regularizer functions specified by the user. Optimizer could also be extended to accept data in a pandas database. An additional method for visualizing outputs, including coefficients and their corresponding label, and plots of the mean squared error over number of iterations could be added to the optimizer module as well.   
+
+One important but coding-intensive extension would be adding a reverse mode ("back prop") autodifferentiation module. Reverse mode is more efficient than forward mode and as data size and number of iterations increase when using the optimizer class, efficiency is more important. Using social science data as an example, our current optimizer module may be applied in useful ways to estimate model coefficients, especially when functions are non-linear and too complex to be computed symbolically. However, by adding a reverse mode, our package would be capable of supporting a machine learning module. When applied to the same social science data, this module would not only be faster, but it could provide insights into functional form that could potentially aid the interpretation of the data. This will be an essential tool of future social science research.   
+
+
