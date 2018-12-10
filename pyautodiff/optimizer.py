@@ -1,7 +1,7 @@
 from pyautodiff.interface import AutoDiff as AD
 import pyautodiff.admath as admath
 import numpy as np
-# from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,r2_score
 import random
 
 class Optimizer:
@@ -112,9 +112,26 @@ class Optimizer:
         # else: # user-inputted optimizer
         #     return optimizer
 
+    def predict_proba(self, X):
+        """ Returns the classification predicted probability
+        """
+        return admath.logistic(X@self.coefs)
 
     def predict(self, X):
-        return X@self.coefs
+        """ Returns the predicted values for either regression or classification
+        """
+        if self.problem_type == 'classification':
+            return np.where(admath.logistic(X@self.coefs) >= 0.5, 1, 0)
+        else:
+            return X@self.coefs
+
+    def score(self, X, y):
+        """ Returns the accuracy score for classification and r2 for regression
+        """
+        if self.problem_type == 'classification':
+            return accuracy_score(self.predict(X),y)
+        else:
+            return r2_score(self.predict(X),y)
 
     def _compute_reg_loss(self,betas):
         """ Calculates the regularization loss term
@@ -142,34 +159,30 @@ class Optimizer:
 
     def fit_gd(self, X, y, iters=1000,verbose=False):
         self.coefs = np.random.rand(X.shape[1])
-        cur_loss = self.mse_loss(y, self.predict(X))
         i = 0
         while i < iters:
             func_for_opt = self.cost(X,y)
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
-                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print("=====\nIter {}".format(i))
                 print(self.coefs)
             grads = ad_obj.get_der(list(self.coefs))
             for idx,grad in enumerate(grads):
                 if verbose:
                     print('coef{}: {}'.format(idx,self.coefs[idx]))
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
-
-            cur_loss = self.mse_loss(y, self.predict(X))
             i+=1
 
 
     def fit_sgd(self, X, y, iters=1000,verbose=False):
         self.coefs = np.random.rand(X.shape[1])
-        cur_loss = self.mse_loss(y, self.predict(X))
         i = 0
         while i < iters:
             sgd_index = random.randint(0,X.shape[0]-1)
             func_for_opt = self.cost(X[sgd_index],y[sgd_index])
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
-                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print("=====\nIter {}".format(i))
                 print(self.coefs)
             grads = ad_obj.get_der(list(self.coefs))
 
@@ -178,6 +191,4 @@ class Optimizer:
                     print('coef{}: {}'.format(idx,self.coefs[idx]))
                     print(grad)
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
-
-            cur_loss = self.mse_loss(y, self.predict(X))
             i+=1
