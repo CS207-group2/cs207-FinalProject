@@ -23,6 +23,8 @@ class Optimizer:
         self.optimizer = self._get_optimizer(optimizer)
         self.regularizer = regularizer
         self.lam = lam
+        self.loss_list = []
+#         self.coefs = np.random.rand(X.shape[1])
 
     def _get_loss_fn(self,loss):
         """ Convert loss into a function if it was inputted as a string
@@ -79,6 +81,8 @@ class Optimizer:
 
             # This is the squared loss term
             base_val = self.loss_fn(Y_i,y_preds)
+#             print(args)
+#             print(base_val.val)
 
             # This adds the regularizer loss
             if self.regularizer is not None:
@@ -123,11 +127,11 @@ class Optimizer:
         return np.sum((y-y_preds)**2)/len(y)
 
 
-    def fit(self, X, y, iters=1000, verbose=False):
+    def fit(self, X, y, iters=1000, verbose=False,coeff_guess = None):
         """ Wrapper method for fit. Calls the function saved in self.optimizer which is
         fit_gd or fit_sgd depending on whether the optimizer is gd or sgd.
         """
-        self.optimizer(X,y,iters,verbose=verbose)
+        self.optimizer(X,y,iters,verbose=verbose,coeff_guess=coeff_guess)
 
     def fit_gd(self, X, y, iters=1000,verbose=False):
         self.coefs = np.random.rand(X.shape[1])
@@ -135,6 +139,7 @@ class Optimizer:
         i = 0
         while i < iters:
             func_for_opt = self.cost(X,y)
+            
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
                 print("=====\nIter {} Loss: {}".format(i,cur_loss))
@@ -149,9 +154,13 @@ class Optimizer:
             i+=1
 
 
-    def fit_sgd(self, X, y, iters=1000,verbose=False):
-        self.coefs = np.random.rand(X.shape[1])
-        cur_loss = self.mse_loss(y, self.predict(X))
+    def fit_sgd(self, X, y, iters=1000,verbose=False,coeff_guess = None):
+        if coeff_guess is not None:
+            self.coefs = coeff_guess
+        else:
+            self.coefs = np.random.rand(X.shape[1])
+            
+        cur_loss = self.cost(y, self.predict(X))
         i = 0
         while i < iters:
             sgd_index = random.randint(0,X.shape[0]-1)
@@ -169,4 +178,5 @@ class Optimizer:
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
 
             cur_loss = self.mse_loss(y, self.predict(X))
+            self.loss_list.append(cur_loss)
             i+=1
