@@ -1,11 +1,11 @@
 from pyautodiff.interface import AutoDiff as AD
 import pyautodiff.admath as admath
 import numpy as np
-# from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,r2_score
 import random
 
 class Optimizer:
-    def __init__(self,lr=0.01,loss='mse',optimizer='gd',regularizer=None,lam=None):
+    def __init__(self,lr=0.01,loss='mse',optimizer='gd',regularizer=None,lam=None,problem_type='regression'):
         """
         lr : float, the learning rate for our algorithm
         loss : string or function, a string that indicates which of the pre-specified
@@ -15,14 +15,16 @@ class Optimizer:
         regularizer : string, indicates which regularizer to use. Supported regularizers are
             'l1' for lasso and 'l2' for ridge
         lam : float, the regularization parameter value
+        problem_type : string, 'regression' or 'classification', indicator whether it is a regression
+            or classification problem
         """
         self.lr = lr
-
         self.loss_fn = self._get_loss_fn(loss)
         self.cost = self._get_cost_fn(self.loss_fn,optimizer)
         self.optimizer = self._get_optimizer(optimizer)
         self.regularizer = regularizer
         self.lam = lam
+        self.problem_type = problem_type
 
     def _get_loss_fn(self,loss):
         """ Convert loss into a function if it was inputted as a string
@@ -46,6 +48,9 @@ class Optimizer:
         elif optimizer == 'sgd':
             return self.cost_fn_sgd
 
+    def sigmoid(self, z):
+        return 1/(1+admath.exp(-z))
+
     def cost_fn_gd(self,X,Y):
         """ Uses the loss function saved in self.loss_fn to create a cost function for gd
         """
@@ -56,6 +61,9 @@ class Optimizer:
                 y_preds = 0
                 for x_i,b_i in zip(x,betas):
                     y_preds += x_i*b_i
+                if self.problem_type == 'classification':
+                    # y_preds = admath.logistic(y_preds)
+                    y_preds = self.sigmoid(y_preds)
                 losses.append(self.loss_fn(y,y_preds))
             # This is the squared loss term
             base_val = admath.sum(losses)/len(Y)
@@ -77,6 +85,9 @@ class Optimizer:
             for x_i,b_i in zip(X_i,betas):
                 y_preds += x_i*b_i
 
+            if self.problem_type == 'classification':
+                # y_preds = admath.logistic(y_preds)
+                y_preds = self.sigmoid(y_preds)
             # This is the squared loss term
             base_val = self.loss_fn(Y_i,y_preds)
 
@@ -98,12 +109,29 @@ class Optimizer:
                 return self.fit_sgd
             else:
                 raise Exception('Invalid optimizer')
-#         else: # user-inputted optimizer
-#             return optimizer
+        # else: # user-inputted optimizer
+        #     return optimizer
 
+    def predict_proba(self, X):
+        """ Returns the classification predicted probability
+        """
+        return admath.logistic(X@self.coefs)
 
     def predict(self, X):
-        return X@self.coefs
+        """ Returns the predicted values for either regression or classification
+        """
+        if self.problem_type == 'classification':
+            return np.where(admath.logistic(X@self.coefs) >= 0.5, 1, 0)
+        else:
+            return X@self.coefs
+
+    def score(self, X, y):
+        """ Returns the accuracy score for classification and r2 for regression
+        """
+        if self.problem_type == 'classification':
+            return accuracy_score(self.predict(X),y)
+        else:
+            return r2_score(self.predict(X),y)
 
     def _compute_reg_loss(self,betas):
         """ Calculates the regularization loss term
@@ -131,34 +159,30 @@ class Optimizer:
 
     def fit_gd(self, X, y, iters=1000,verbose=False):
         self.coefs = np.random.rand(X.shape[1])
-        cur_loss = self.mse_loss(y, self.predict(X))
         i = 0
         while i < iters:
             func_for_opt = self.cost(X,y)
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
-                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print("=====\nIter {}".format(i))
                 print(self.coefs)
             grads = ad_obj.get_der(list(self.coefs))
             for idx,grad in enumerate(grads):
                 if verbose:
                     print('coef{}: {}'.format(idx,self.coefs[idx]))
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
-
-            cur_loss = self.mse_loss(y, self.predict(X))
             i+=1
 
 
     def fit_sgd(self, X, y, iters=1000,verbose=False):
         self.coefs = np.random.rand(X.shape[1])
-        cur_loss = self.mse_loss(y, self.predict(X))
         i = 0
         while i < iters:
             sgd_index = random.randint(0,X.shape[0]-1)
             func_for_opt = self.cost(X[sgd_index],y[sgd_index])
             ad_obj = AD(func_for_opt,multivar=True)
             if verbose:
-                print("=====\nIter {} Loss: {}".format(i,cur_loss))
+                print("=====\nIter {}".format(i))
                 print(self.coefs)
             grads = ad_obj.get_der(list(self.coefs))
 
@@ -167,6 +191,4 @@ class Optimizer:
                     print('coef{}: {}'.format(idx,self.coefs[idx]))
                     print(grad)
                 self.coefs[idx] = self.coefs[idx] - self.lr*grad
-
-            cur_loss = self.mse_loss(y, self.predict(X))
             i+=1
