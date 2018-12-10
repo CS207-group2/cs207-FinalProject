@@ -219,6 +219,7 @@ It leverages autodiff to calculate the gradients and performs gradient descent. 
 #### Implementation
 Optimizer takes in a learning rate (lr=0.01), a loss function (loss='mse'), an optimizer (optimizer='gd'), a regularizer (regularizer=None), and a regularizer parameter value (lam=None). 
 Optimizer is programmed with:
+    
     * a mean squared error loss function. In addition, the user may pass in their own loss function. 
     * gradient descent, stocastic gradient descent, steepest gradient descent, and BFGS algorithm as optimizers.  
     * l1 and l2 as regularizer functions, corresponding to lasso and ridge regression, respectively.
