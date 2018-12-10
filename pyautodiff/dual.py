@@ -230,35 +230,53 @@ class Dual:
         """
             equal dunder method for dual class
         """
-        return (self.val == other.val)
+        try:
+            return (self.val == other.val)
+        except AttributeError:
+            return (self.val == other)
 
     def __ne__(self, other):
         """
             not equal dunder method for dual class
         """
-        return not (self.val == other.val)
+        try:
+            return not (self.val == other.val)
+        except AttributeError:
+            return not (self.val == other)
 
     # comparison dunder method
     def __lt__(self, other):
         """
             less than dunder method for dual class
         """
-        return (self.val < other.val)
+        try:
+            return (self.val < other.val)
+        except AttributeError:
+            return (self.val < other)
 
     def __le__(self, other):
         """
             less than or equal to dunder method for dual class
         """
-        return (self.val <= other.val)
+        try:
+            return (self.val <= other.val)
+        except AttributeError:
+            return (self.val <= other)
 
     def __gt__(self, other):
         """
             greater than dunder method for dual class
         """
-        return (self.val > other.val)
+        try:
+            return (self.val > other.val)
+        except AttributeError:
+            return (self.val > other)
 
     def __ge__(self, other):
         """
             greater than or equal to dunder method for dual class
         """
-        return (self.val >= other.val)
+        try:
+            return (self.val >= other.val)
+        except AttributeError:
+            return (self.val >= other)

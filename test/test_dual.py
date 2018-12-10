@@ -132,6 +132,10 @@ def test__eq__():
     z = Dual(1)
     assert True == (x == y)
     assert False == (x == z)
+    assert True == (x == 2)
+    assert True == (2 == x)
+    assert False == (x == 3)
+    assert False == (3 == x)
 
 def test_ne__():
     x = Dual(2)
@@ -139,6 +143,10 @@ def test_ne__():
     z = Dual(1)
     assert False == (x != y)
     assert True == (x != z)
+    assert True == (x != 4)
+    assert True == (4 != x)
+    assert False == (x != 2)
+    assert False == (2 != x)
 
 # Comparision operation
 
@@ -149,6 +157,9 @@ def test__lt__():
     assert False == (x < y)
     assert False == (x < z)
     assert True  == (z < x)
+    assert True  == (x < 3)
+    assert False == (3 < x)
+
 
 def test__gt__():
     x = Dual(2)
@@ -157,6 +168,8 @@ def test__gt__():
     assert False == (x > y)
     assert True  == (x > z)
     assert False == (z > x)
+    assert True  == (x > 1)
+    assert False == (1 > x)
 
 def test__le__():
     x = Dual(2)
@@ -165,6 +178,8 @@ def test__le__():
     assert True  == (x <= y)
     assert False == (x <= z)
     assert True  == (z <= x)
+    assert True  == (x <= 3)
+    assert False == (3 <= x)
 
 def test__ge__():
     x = Dual(2)
@@ -173,3 +188,5 @@ def test__ge__():
     assert True  == (x >= y)
     assert True  == (x >= z)
     assert False == (z >= x)
+    assert True  == (x >= 1)
+    assert False == (1 >= x)
