@@ -62,3 +62,44 @@ def test_opty_verbose_bfgs():
     opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01)
     opt.fit(X2,y2,iters=1000, verbose=True)
     assert opt.coefs[0] <= 3
+
+def test_opty_classification():
+    opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01,
+                  problem_type='classification')
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    assert opt.coefs[0] <= 3
+    
+# def test_opty_regression():
+#     opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01,
+#                   problem_type='regression')
+#     opt.fit(X2,y2,iters=1000, verbose=True)
+#     assert opt.coefs[0] <= 3
+    
+def test_score():
+    opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01,
+                  problem_type='classification')
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    a = opt.score(X2,y2) 
+    assert a>=0 
+    
+def test_score1():
+    opt=Optimizer(loss='mse',optimizer='sgd',regularizer='ridge',lam=0.01,
+                  problem_type='classification')
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    a = opt.score(X2,y2) 
+    assert a>=0
+
+def test_score2():
+    opt=Optimizer(loss='mse',optimizer='sgd',regularizer='ridge',lam=0.01,
+                  problem_type='regression')
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    a = opt.score(X2,y2) 
+    assert a>=0
+    
+def test_score():
+    opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01,
+                  problem_type='classification')
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    a = opt.predict_proba(X2)[0] 
+    assert a>=0 
+    
