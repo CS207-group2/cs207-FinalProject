@@ -98,7 +98,7 @@ Multivariable case (multiple functions):
 [5, 5]
 ```
 
-Gradient Descent (optimization):
+Gradient Descent (optimization) for Regression:
 ```python
 >>> from sklearn.datasets import make_regression
 >>> from pyautodiff.optimizer import Optimizer
@@ -107,6 +107,23 @@ Gradient Descent (optimization):
 >>> opt.fit(X , y, iters=1000) # fit to the data
 >>> opt.coefs #print out the coefficients
 >>> opt.score(X, y) # R-square for regression, accuracy for classification
+```
+
+Gradient Descent (optimization) for Classification:
+```python
+>>> from sklearn.datasets import make_classification
+>>> from pyautodiff.optimizer import Optimizer
+>>> X2,y2 = make_classification(n_features=3,n_informative=3,n_redundant=0)
+
+>>> def user_cross_entropy(y,y_preds):
+>>>     if y == 1:
+>>>         return -admath.log(y_preds)
+>>>     else:
+>>>         return -admath.log(1-y_preds)
+
+>>> opt = Optimizer(loss=user_cross_entropy,optimizer='sgd',regularizer='ridge',lam=0.01,problem_type='classification')
+>>> opt.fit(X2,y2,iters=2500)
+>>> y_preds = opt.predict(X2)
 ```
 
 # Background
