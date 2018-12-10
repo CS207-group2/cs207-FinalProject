@@ -2,7 +2,7 @@
 - [Introduction](#Introduction)
 - [Usage](#Usage)
   - [Installation](#Installation)
-  - [How to use](#How-to-use-Autodiff)
+  - [How to use](#How-to-use-pyautodiff)
 - [Background](#Background)
 - [Software organization](#Software-Organization)
 - [Implementation Details](#Implementation-Details)
@@ -13,80 +13,88 @@
 - [Future Implementations](#Future-Implementations)
 
 # Introduction
-Automatic differentiation is a set of techniques to numerically evaluate the derivative of a function specified by a computer program. Automatic differentiation breaks down a function by looking at the sequence of elementary arithmetic operations (addition, subtraction, multiplication and division) and elementary functions (exponential, log10, log2, loge, sin, cos, etc). By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. A major application of automatic differentiation is gradient-based optimization, such as gradient descent, which is commonly used as the foundation of many machine learning algorithms including Neural Networks. 
+Automatic differentiation is a set of techniques to numerically evaluate the derivative of a function specified by a computer program. Automatic differentiation breaks down a function by looking at the sequence of elementary arithmetic operations (addition, subtraction, multiplication and division) and elementary functions (exponential, log10, log2, loge, sin, cos, etc). By applying the chain rule repeatedly to these operations, derivatives of arbitrary order can be computed automatically, accurately to machine accuracy. A major application of automatic differentiation is gradient-based optimization, such as gradient descent, which is commonly used as the foundation of many machine learning algorithms including Neural Networks.
 
-This package, `autodiff`, is a package of automatic differentiation, which means it can automatically differentiate a function input into the program.
+This package, `pyautodiff`, is a package of automatic differentiation, which means it can automatically differentiate a function input into the program.
 
 The package currently supports forward-mode differentiation, which means the chain rule is traversed from inside to outside.
 
 # Usage
 
 ## Installation
-Currently, a user can install the package by following the steps below:
-1. Navigate to your project directory and download the package from our GitHub [repository](https://github.com/CS207-group2/cs207-FinalProject/)
-2. Create a virtual environment `python3 -m virtualenv env` in the top-level of your directory
-* you might need to download `virtualenv` if you do not have it.
-3. Type `source env/bin/activate` which activates your virtual environment
-4. run `python setup.py install` which installs Autodiff in your virtual environment
+* The package is available on `PyPI`
+```
+pip install pyautodiff
+```
 
-## How to use *Autodiff*?
-The user can use AutoDiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative of that function at a certain value by passing in that value to the object. This object can then be called to return the derivative of the function evaluated at that point.
+## How to use *pyautodiff*?
+The user can use pyautodiff by passing a function to the AutoDiff constructor to create an AutoDiff object. Then, the user can evaluate the derivative and output value of that function at a certain value by passing in that input value to the object. This object can then be called to return the derivative and the output values of the function evaluated at that point.
 
 Scalar function case:
 ```python
->>> from autodiff.interface.interface import AutoDiff as AD
+>>> from pyautodiff.interface import AutoDiff as AD
 >>> def square_fn(x):
 ...    return x ** 2
 >>> ad_square = AD(square_fn)
 >>> ad_square.get_der(3)
 6
+>>> ad_square.get_val(3)
+9
 ```
 
 Vector function case:
 ```python
->>> from autodiff.interface.interface import AutoDiff as AD
+>>> from pyautodiff.interface import AutoDiff as AD
 >>> def square_fn(x):
 ...    return x ** 2
 >>> ad_square = AD(square_fn)
 >>> ad_square.get_der([1,2])
-[2,4]
+[2, 4]
+>>> ad_square.get_val([1,2])
+[1, 4]
 ```
 
-In cases where the user wants to use operations such as sin/cos, they should call those functions from the AutoDiff library so that the derivative can be automatically computed.
+In cases where the user wants to use operations such as sin/cos, they should call those functions from the pyautodiff library so that the derivative can be automatically computed.
 
 SINE, COSINE, EXPONENTIAL function case:
 ```python
->>> from autodiff.interface.interface import AutoDiff as AD
->>> import autodiff.admath.admath as admath
+>>> from pyautodiff.interface import AutoDiff as AD
+>>> import pyautodiff.admath as admath
 
 >>> def sin_fn(x):
 ...    return 5*admath.sin(x)
 >>> ad_sin = AutoDiff(sin_fn)
 >>> ad_sin.get_der(0)
 5
+>>> ad_sin.get_val(0)
+0
 ```
 
 Multivariable case (one function):
 ```python
->>> from autodiff.interface.interface import AutoDiff as AD
+>>> from pyautodiff.interface import AutoDiff as AD
 
 >>> def my_fn_1d(x, y):
 ...	  return x**2 + y**2
 >>> fn = AD(my_fn_1d)
 >>> fn.get_der([[1,2],[3,4],[5,6]])
-[[2, 4], [6, 8], [10, 12]], [[1, 1], [1, 1], [1, 1]]
+[[2, 4], [6, 8], [10, 12]]
+>>> fn.get_val([[1,2],[3,4],[5,6]])
+[5, 25, 61]
 ```
 
 
 Multivariable case (multiple functions):
 ```python
->>> from autodiff.interface.interface import AutoDiff as AD
+>>> from pyautodiff.interface import AutoDiff as AD
 
 >>> def my_fn_2d(x, y):
 ...	  return [x**2 + y**2, x + 2+y]
 >>> fn = AD(my_fn_2d, ndim=2)
 >>> fn.get_der([1,2])
 [[2, 4], [1, 1]]
+>>> fn.get_val([1,2])
+[5, 5]
 ```
 
 
@@ -102,23 +110,19 @@ Dual numbers can simply be used by substituting (x + ɛ x') for x in f(x) where 
   * Directory structure
   ```
    FinalProject\
-         autodiff\
+         pyautodiff\
                __init__.py
-               admath/
-                    __init__.py
-                    admath.py
-               dual/
-                    __init__.py
-                    dual.py
-               interface/
-                    __init__.py
-                    interface.py
+               admath.py
+               dual.py
+               interface.py
+               optimizier.py
          test\
               __init__.py
               .coverage
               test_admath.py
               test_dual.py
               test_interface.py
+              test_optimizer.py
          docs\
               dual.md
               README.md
@@ -136,16 +140,21 @@ Dual numbers can simply be used by substituting (x + ɛ x') for x in f(x) where 
       * this is the main class where an instance of our class can be instantiated by passing in a function.
     * `dual`
       * this is the class for dual number input, which contains the `val` and `der` attributes that stores the numerical value and derivate respectively.
+    * `optimizer`
+      * this is a wrapper for pyautodiff with an API similar to sklearn for fitting the data dependent and independent variables.
+      * it calcualtes gradients and performs gradient descent.
   * Test
     * Tests of this package are in the `test` folder.
     * They are run by `TravisCI` and the coverage is examined by `Coveralls`
     * We have embedded the badges in the README of the package
-  * How can someone install your package?  
-    * Currently, the package is available to download from the GitHub repo and the installation details is included in the `How to install?` section
-    * We plan to distribute the package through `PyPI` in the near future
+  * How can someone install your package?
+    * The package is available on `PyPI`
+    ```
+    pip install pyautodiff
+    ```
 
 # Implementation details
-Currently, the autodiff package contains 2 classes and 1 module.
+Currently, the pyautodiff package contains 2 classes and 2 modules.
 
 ### Interface Class
 #### Usage
@@ -172,16 +181,41 @@ This admath module performs both value and derivative calculations of elemental 
 
 #### Implementation
 We implemented the following functions:
-- sin(x)
-- cos(x)
-- log(x)
-- log10(x)
-- log2(x)
-- exp(x)
-- sqrt(x)
+1. Trigonometric functions
+  - sin(x)
+  - cos(x)
+  - tan(x)
+  - arcsin(x)
+  - arcos(x)
+  - arctan(x)
+2. Logarithmic functions
+  - log(x)
+  - log10(x)
+  - log2(x)
+  - logb(x, base)
+
+3. Hyperbolic functions
+  - sinh(x)
+  - cosh(x)
+  - tanh(x)
+
+4. Miscellaneous functions
+  - exp(x)
+  - sqrt(x)
+  - logistic(x)
+  - power(expo, base)
+  - sum(x)
+  - abs(x)
 
 In cases where x is a scalar, we simply return the numpy equivalent (eg np.sin(x)). When x is dual, we manually set val and der of the dual object. We set the der by figuring out symbolically what the derivative should be (sin(x) should be cos(x)) and applying the chain rule (multiplying x.der to cos(x)). This way, our program can automatically apply the chain rule to our inputs and handle nested functions with ease. Again, like the scalar case, we use numpy to do the actual elemental calculations.
 
+### Optimizer Module
+#### Usage
+This optimizer module is a wrapper for pyautodiff with an API similar to sklearn for fitting dependent and independent variables in the data
+
+It leverages autodiff to calculate the gradients and performs gradient descent. It can take in a custom loss function, regularizer, and/or optimizer.
+
+#### Implementation
 
 # External Dependencies
 - numpy: to perform calculations on elemental functions such as sin and exponent
