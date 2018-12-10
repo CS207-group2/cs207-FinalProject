@@ -246,8 +246,9 @@ It leverages autodiff to calculate the gradients and performs gradient descent. 
 #### Implementation
 
 # External Dependencies
-- numpy: to perform calculations on elemental functions such as sin and exponent
-- sklearn: to calculate accuracy and R-square score
+- numpy
+- sklearn
+- scipy
 
 
 # Future Implementations
