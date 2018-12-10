@@ -104,8 +104,9 @@ Gradient Descent (optimization):
 >>> from pyautodiff.optimizer import Optimizer
 >>> X,y,coef = make_regression(n_samples=4500,n_features=6,n_informative=6,coef=True) # simulate data for regression and store ground truth coefficients
 >>> opt = Optimizer(loss = 'mse', optimizer = 'sgd',lr=0.0001) #Initialize optimizer
->>> opt.fit(X_array, y, iters=1000) # fit to the data
+>>> opt.fit(X , y, iters=1000) # fit to the data
 >>> opt.coefs #print out the coefficients
+>>> opt.score(X, y) # R-square for regression, accuracy for classification
 ```
 
 # Background
@@ -229,6 +230,7 @@ It leverages autodiff to calculate the gradients and performs gradient descent. 
 
 # External Dependencies
 - numpy: to perform calculations on elemental functions such as sin and exponent
+- sklearn: to calculate accuracy and R-square score
 
 
 # Future Implementations
