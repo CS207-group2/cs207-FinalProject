@@ -117,3 +117,13 @@ def test_mul_array():
 	der = ad_mul_array.get_der([[1,2],[1,2],[1,2]])
 	assert val == [[4, 3, 2], [4, 3, 2], [4, 3, 2]]
 	assert der == [[[8, 4], [1, 1], [2, 0]], [[8, 4], [1, 1], [2, 0]], [[8, 4], [1, 1], [2, 0]]]
+
+def functionxx(x):
+	return 2*x
+
+def test_numpy_wrapper():
+	functionxx_class = AD(functionxx)
+	val = functionxx_class.get_val_numpy(np.array([1,2]))
+	der = functionxx_class.get_der_numpy(np.array([1,2]))
+	assert list(val) == [2,4]
+	assert list(der) == [2,2]

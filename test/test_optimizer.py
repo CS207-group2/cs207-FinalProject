@@ -52,3 +52,13 @@ def test_opty_verbose_sgd():
     opt=Optimizer(loss=user_mse,optimizer='sgd',lam=0.01)
     opt.fit(X2,y2,iters=1000, verbose=True)
     assert opt.coefs[0] <= 3
+
+def test_opty_verbose_steepestgd():
+    opt=Optimizer(loss='mse',optimizer='steepestgd',lam=0.01)
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    assert opt.coefs[0] <= 3
+
+def test_opty_verbose_bfgs():
+    opt=Optimizer(loss='mse',optimizer='bfgs',regularizer='ridge',lam=0.01)
+    opt.fit(X2,y2,iters=1000, verbose=True)
+    assert opt.coefs[0] <= 3
