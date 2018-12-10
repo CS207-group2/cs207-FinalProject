@@ -189,7 +189,7 @@ Currently, the pyautodiff package contains 2 classes and 2 modules.
 Interface is our main class where an instance of our class can be instantiated by passing in a function. Next, the user can pass in a scalar or a list of numbers into the get_der method to evaluate the derivative(s) of the function with respect to the point(s). Furthermore, our class supports multivariable differentiation, where the user can write a multivariable function, pass in a 2d list where each list represents the derivative calculation at each value, and get back the Jacobian matrix.
 
 #### Implementation
-The interface object contains 3 attributes which are fn, ndim, and l. fn represents the function that we want to evaluate a derivative at, ndim is the number of dimensions of the function (how many functions we want to evaluate), and l is the number of variables in the function. While fn is passed into the function and ndim is optionally passed in, l is inferred from fn through the usage of the inspect module.
+The interface object contains 4 attributes which are fn, ndim, l, and multivar. fn represents the function that we want to evaluate a derivative at, ndim is the number of dimensions of the function (how many functions we want to evaluate), and l is the number of variables in the function. While fn is passed into the function and ndim is optionally passed in, l is inferred from fn through the usage of the inspect module. However, in the case of when a single list is passed in and the goal is to do a multivariable gradient calculation wrt each element in the list (eg finding gradient wrt each beta in gradient descent), the multivar boolean variable needs to be set to True to indicate that it is a multivariable function, so that l can be correctly set.
 
 The get_der function works by first determining which type of an input is given to the function through the usage of ndim and l as well as what type of an argument is passed into the get_der function (whether it's a scalar or a list). The function then handles these cases separately. For the single variable case (l = 1), if function argument is a scalar, then a dual object is instantiated and passed into fn, the function attribute, so that the derivative can be calculated. If the argument is a list, then the same operation done in a scalar is repeatedly done through a for loop and the result will be appended to a list and returned. In the multivariable case (l>1), then the derivative with respect to each variable is calculated separately and appended to the returned list.
 
@@ -244,6 +244,17 @@ This optimizer module is a wrapper for pyautodiff with an API similar to sklearn
 It leverages autodiff to calculate the gradients and performs gradient descent. It can take in a custom loss function, regularizer, and/or optimizer.
 
 #### Implementation
+The optimizer object has 6 attributes:
+
+-lr (float), the learning rate for our algorithm. Default is 0.01.
+-loss (string or function), a string that indicates which of the pre-specified loss functions to use or a function representing the loss. Default is mse
+-optimizer (string), indicates which optimizer to use. Supported optimizers are 'gd' for gradient descent and 'sgd' for stochastic gradient descent. Default is set to 'gd'.
+-regularizer (string), indicates which regularizer to use. Supported regularizers are 'l1' for lasso and 'l2' for ridge (or None). Default is None.
+-lam (float), the regularization parameter value. Used if regularizer is not None
+-problem_type (string), 'regression' or 'classification', indicator whether it is a regression or classification problem. This is defaulted to 'regression'.
+
+The optimizer object creates a function out of X and Y where the coefficients are the variables. This function is then passed on to be used with the pyautodiff object to calculate the gradients wrt each beta and thus to perform optimization using a specified optimizer method. 
+
 
 # External Dependencies
 - numpy
