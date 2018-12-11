@@ -270,7 +270,7 @@ Optimizer module
 - Accept data in various data types 
 New method 
 - visual outputs, e.g. coefficients and corresponding labels, plot MSE over iterations
-- Add reverse mode auto differentiation 
+Add reverse mode auto differentiation 
 - Build differentiation tree by adding a “next” element to each dual number and adding a search algorithm
 - More efficient than forward mode as number of variables increases
 
