@@ -248,12 +248,25 @@ The optimizer object has 6 attributes:
 
 - lr (float), the learning rate for our algorithm. Default is 0.01.
 - loss (string or function), a string that indicates which of the pre-specified loss functions to use or a function representing the loss. Default is mse
-- optimizer (string), indicates which optimizer to use. Supported optimizers are 'gd' for gradient descent and 'sgd' for stochastic gradient descent. Default is set to 'gd'.
+- optimizer (string), indicates which optimizer to use. Supported optimizers are 'gd' for gradient descent, 'sgd' for stochastic gradient descent, 'steepestgd' for steepest gradient descent, and 'bfgs' for bfgs. Default is set to 'gd'.
 - regularizer (string), indicates which regularizer to use. Supported regularizers are 'l1' for lasso and 'l2' for ridge (or None). Default is None.
 - lam (float), the regularization parameter value. Used if regularizer is not None
 - problem_type (string), 'regression' or 'classification', indicator whether it is a regression or classification problem. This is defaulted to 'regression'.
 
-The optimizer object creates a function out of X and Y where the coefficients are the variables. This function is then passed on to be used with the pyautodiff object to calculate the gradients wrt each beta and thus to perform optimization using a specified optimizer method. 
+The optimizer object creates a function out of X and Y where the coefficients are the variables. This function is then passed on to be used with the pyautodiff object to calculate the gradients wrt each beta and thus to perform optimization using the specified parameters.  
+
+The following are implemented:
+
+Solvers
+- Gradient Descent
+- Stochastic Gradient Descent
+- Steepest Gradient Descent
+- BFGS: Broyden–Fletcher–Goldfarb–Shanno algorithm
+
+Regularizers
+- Lasso
+- Ridge
+
 
 
 # External Dependencies
