@@ -5,3 +5,5 @@
 .cache
 *.coverage
 *build/
+*dist/
+*pyautodiff.egg-info/
