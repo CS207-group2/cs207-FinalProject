@@ -5,15 +5,14 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pyautodiff",
-    version="0.3.1",
+    version="0.3.2",
     author="Phoebe Wong",
     author_email="wong@g.harvard.edu",
     description="A package for automatic differentiation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/cs207-group2/cs207-FinalProject",
-    packages=find_packages('pyautodiff'),
-    package_dir = {"":"pyautodiff"},
+    packages=['pyautodiff'],#find_packages('pyautodiff'),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
