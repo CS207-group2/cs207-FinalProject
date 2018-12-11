@@ -12,8 +12,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/cs207-group2/cs207-FinalProject",
-    packages=find_packages('autodiff'),
-    package_dir = {"":"autodiff"},
+    packages=find_packages('pyautodiff'),
+    package_dir = {"":"pyautodiff"},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
