@@ -12,7 +12,8 @@ class Optimizer:
         loss : string or function, a string that indicates which of the pre-specified
             loss functions to use or a function representing the loss
         optimizer : string, indicates which optimizer to use. Supported optimizers are 'gd'
-            for gradient descent and 'sgd' for stochastic gradient descent
+            for gradient descent, 'sgd' for stochastic gradient descent, 'steepestgd' for steepest
+            gradient descent, and 'bfgs' for bfgs
         regularizer : string, indicates which regularizer to use. Supported regularizers are
             'l1' for lasso and 'l2' for ridge
         lam : float, the regularization parameter value
